@@ -246,3 +246,189 @@
 - "50% 할인 받기"
 - "무료 체험 신청"
 - "바로 구매하기"
+
+---
+
+## 웹 랜딩 문법 규칙 (Landing Grammar Rules)
+
+> 이 규칙은 "PPT 슬라이드 이어붙임" 문제를 방지하고, 연속 스크롤 웹 랜딩페이지 문법을 강제한다.
+
+---
+
+### (A) 메시지 중복 금지 규칙 (Message Deduplication)
+
+- **핵심 주장(claim)은 최대 7개**로 제한 (MECE 원칙)
+- 각 주장은 **단 하나의 섹션에만 "주요 주장"으로 등장**
+- 다른 섹션에서 같은 주장 반복 금지 — "증거/예시/보완"만 허용
+- 예: "가격이 저렴하다"는 09(Benefits) 또는 13(CTA)에서만 주요 주장으로 사용
+
+**섹션-주장 배치 우선순위 (기본)**:
+
+| 주장 유형 | 우선 배치 섹션 |
+|----------|--------------|
+| 핵심 혜택/결과 | 01 Hero |
+| 고통/공감 | 02 Pain |
+| 문제 원인 | 03 Problem |
+| 변화 가능성 | 04 Story |
+| 제품 정의 | 05 Solution |
+| 작동 방식 | 06 How |
+| 사회적 증거 | 07 Social Proof |
+| 권위/신뢰 | 08 Authority |
+| 가치/혜택 목록 | 09 Benefits |
+| 리스크 제거 | 10 Risk |
+| 경쟁 우위 | 11 Comparison |
+| 적합 타겟 | 12 Filter |
+| 가격+긴급성 | 13 Final CTA |
+
+---
+
+### (B) 카피 예산 (Copy Budget)
+
+**기본 예산 (모든 섹션의 기본값)**:
+
+| 요소 | 제한 |
+|------|------|
+| Headline | 1줄, 최대 22자 |
+| Sub | 1줄, 최대 34자 |
+| Bullets | 3개, 각 12~18자 |
+| Evidence | 1개 (숫자/짧은 후기/보장 문구 중 택1) |
+
+**예외 예산** (이 섹션만 허용):
+
+| 섹션 | 예외 내용 |
+|------|----------|
+| 07 Social Proof | 후기 3~5개 허용 |
+| 09 Benefits | 혜택 항목 5~7개 허용 |
+| 10 Risk Removal | FAQ 3~5개 허용 |
+
+**금지 사항**:
+- 섹션 높이에 맞춰 텍스트를 억지로 채우는 행위 금지
+- 장문 본문 설명 금지 (설명이 필요하면 시각 요소로 대체)
+- 같은 섹션에서 "3가지 핵심", "3가지 차별점" 등 반복 타이틀 1회만 사용
+
+---
+
+### (C) 프레임 예산 (Frame Budget)
+
+**강한 프레임 허용 섹션**: 13섹션 중 **최대 4섹션**
+
+- 강한 프레임 = 카드 그리드 / 글로우 박스 / 두꺼운 보더 / 네온 효과
+- 권장 강프레임 섹션: **07(Proof), 09(Benefits), 11(Compare), 13(Final CTA)**
+- 나머지 9섹션은 **호흡 섹션**으로 구성
+
+**호흡 섹션 (Breathing Section) 원칙**:
+- 배경 + 타이포그래피 중심
+- 최소한의 카드 (최대 1~2개, 또는 카드 없음)
+- 가벼운 디바이더, 충분한 여백
+- 섹션 반복 박스 레이아웃 금지
+
+**레이아웃 타입 4종**:
+
+| 타입 | 특징 | 적합 섹션 |
+|------|------|----------|
+| **type_a** | Full-bleed 배경 + 빅 타이포그래피 (호흡) | 01, 03, 05, 08, 13 |
+| **type_b** | Split (텍스트 좌 / 비주얼 우) | 04, 06, 08 |
+| **type_c** | Minimal cards (최대 2~3개 카드) | 02, 10, 12 |
+| **type_d** | Proof grid (후기/수치 그리드) | 07, 09, 11 |
+
+**기본 섹션별 레이아웃 타입 배정**:
+
+```
+01 Hero       → type_a (임팩트 풀블리드)
+02 Pain       → type_c (최대 3 카드)
+03 Problem    → type_a (호흡 + 인포그래픽)
+04 Story      → type_b (비포/애프터 스플릿)
+05 Solution   → type_a (제품명 빅 타이포)
+06 How        → type_b (스텝 플로우)
+07 Proof      → type_d (후기 그리드) ★강프레임
+08 Authority  → type_b (좌 비주얼 / 우 텍스트)
+09 Benefits   → type_d (혜택 그리드) ★강프레임
+10 Risk       → type_c (보장 카드 2~3개)
+11 Compare    → type_d (비교 테이블) ★강프레임
+12 Filter     → type_c (추천/비추 2컬럼)
+13 Final CTA  → type_a (임팩트 풀블리드) ★강프레임
+```
+
+---
+
+### (D) CTA 노출 규칙
+
+- **메인 CTA** (크고 눈에 띄는 버튼): **01(Hero), 13(Final CTA) 2회만** 사용
+- **중간 섹션**: 미니 텍스트 CTA만 허용 ("→ 자세히 보기" 수준)
+- 모든 섹션에 CTA 버튼 삽입 금지 (희소성 원칙)
+
+---
+
+### (E) 높이 프로파일 (Height Profile)
+
+섹션 높이를 3등급으로 추상화한다:
+
+| 프로파일 | 기본 높이 | 해당 섹션 |
+|---------|---------|----------|
+| **emphasis** | ~800px | 01 Hero, 07 Social Proof, 13 Final CTA |
+| **standard** | ~580px | 02 Pain, 04 Story, 06 How, 08 Authority, 09 Benefits |
+| **compact** | ~420px | 03 Problem, 05 Solution, 10 Risk, 11 Compare, 12 Filter |
+
+---
+
+### (F) 연속 스크롤 감 (Continuous Scroll Feel)
+
+**배경 모티프 통일**:
+- 전체 페이지에서 동일한 배경 패턴/모티프를 일관되게 사용
+- (예: 미세한 도트 그리드, 수평 라인, 은은한 그라디언트 방향)
+
+**섹션 간 트랜지션**:
+- 섹션 상단/하단에 배경색 그라디언트 페이드 적용
+- 인접 섹션 배경색이 유사한 방향으로 설계 (흰→연회색→흰 교차)
+
+**이미지 프롬프트 기술 지시어 (Positive)**:
+- "web landing page segment"
+- "scroll section of a landing page"
+- "continuous page design, not a standalone slide"
+- "spacious layout, generous whitespace"
+- "clear typographic hierarchy"
+- "minimal framing, avoid heavy borders"
+
+**이미지 프롬프트 금지 지시어 (Negative / MUST include)**:
+- "NOT a presentation slide"
+- "NOT a pitch deck or PPT style"
+- "NOT slide frame or slide border"
+- "NOT bullet-heavy slide layout"
+- "NOT overly boxed or heavily bordered"
+- "NO dense text blocks"
+- "AVOID too many glowing cards in same section"
+
+---
+
+### (G) 텍스트-인-이미지 최소화 규칙
+
+Gemini 이미지 생성 모델의 한글 렌더링 한계를 감안한 규칙:
+
+- **이미지에 포함할 텍스트**: 헤드라인(최대 2줄), 짧은 불릿(3개 이하, 각 15자 이하)
+- **이미지에서 제외할 텍스트**: 긴 본문 설명, 4줄 이상 불릿, FAQ 전문
+- 긴 설명은 카피 산출물(copy_output.json)에만 남기고 이미지에는 시각 요소로 대체
+- 핵심 숫자/키워드는 이미지에 포함 가능 (예: "96%", "월 4만 원", "10배")
+
+---
+
+### (H) page_variant: short(7) / long(13)
+
+파이프라인은 두 가지 모드를 지원한다:
+
+**short(7) — 핵심 전환용 (광고 랜딩, 테스트용)**:
+```
+01 Hero
+02 Pain
+05 Solution
+06 How It Works
+07 Social Proof
+10 Risk Removal (Pricing/Comparison 일부 압축 포함)
+13 Final CTA
+```
+
+**long(13) — 기본 전체 상세페이지**:
+```
+기존 13개 섹션 전체 유지
+```
+
+기본값은 `long`이며, brief에 `page_variant: "short"`을 지정하면 7개 섹션만 생성/스티칭된다.

@@ -1,0 +1,33 @@
+{
+  "_comment": "좌표는 PNG 원본 기준 비율(%). ?debug=true 쿼리로 시각적 확인 후 조정하세요.",
+  "exp_id": "openclaw_v3v4",
+  "cta_url": "https://forms.gle/REPLACE_ME",
+  "hotspots": [
+    {
+      "id": "hero_cta",
+      "section_id": "01_hero",
+      "left": "34%",
+      "top": "7.2%",
+      "width": "32%",
+      "height": "1.1%",
+      "href": "https://forms.gle/REPLACE_ME",
+      "ga4": {
+        "cta_id": "hero_cta",
+        "section_id": "01_hero"
+      }
+    },
+    {
+      "id": "final_cta",
+      "section_id": "13_final_cta",
+      "left": "34%",
+      "top": "96.8%",
+      "width": "32%",
+      "height": "1.1%",
+      "href": "https://forms.gle/REPLACE_ME",
+      "ga4": {
+        "cta_id": "final_cta",
+        "section_id": "13_final_cta"
+      }
+    }
+  ]
+}

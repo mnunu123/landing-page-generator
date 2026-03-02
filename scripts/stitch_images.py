@@ -9,7 +9,7 @@
 import os
 from pathlib import Path
 from typing import List, Optional, Tuple
-from PIL import Image
+from PIL import Image, ImageFilter
 
 
 # 고정 너비 (절대 변경 금지)
@@ -55,12 +55,48 @@ def load_images(image_paths: List[str], target_width: int = FIXED_WIDTH) -> List
     return images
 
 
+def _blend_seams(
+    canvas: Image.Image,
+    seam_ys: List[int],
+    blend_px: int = 32
+) -> Image.Image:
+    """
+    섹션 경계선(seam)을 부드럽게 블렌딩합니다.
+    각 seam 위치에 좁은 Gaussian blur를 적용해 경계 노이즈를 줄입니다.
+
+    Args:
+        canvas: 전체 스티칭된 캔버스 이미지 (RGBA)
+        seam_ys: 각 섹션 경계의 y 좌표 리스트
+        blend_px: 블렌딩 범위 (픽셀, 기본 32px — seam 위아래 16px씩)
+
+    Returns:
+        블렌딩이 적용된 캔버스
+    """
+    half = blend_px // 2
+    for seam_y in seam_ys:
+        y_start = max(0, seam_y - half)
+        y_end = min(canvas.height, seam_y + half)
+        if y_end <= y_start:
+            continue
+
+        band = canvas.crop((0, y_start, canvas.width, y_end))
+        # 부드러운 blur (radius=3 — 자연스럽고 과하지 않은 수준)
+        blurred = band.filter(ImageFilter.GaussianBlur(radius=3))
+        # 원본 40% + 블러 60% 혼합 (경계 완화)
+        blended = Image.blend(band.convert("RGBA"), blurred.convert("RGBA"), alpha=0.55)
+        canvas.paste(blended, (0, y_start))
+
+    return canvas
+
+
 def stitch_sections(
     image_paths: List[str],
     output_path: str,
     background_color: Tuple[int, int, int, int] = (255, 255, 255, 255),
     alignment: str = "center",
-    target_width: int = FIXED_WIDTH
+    target_width: int = FIXED_WIDTH,
+    seam_blend: bool = True,
+    blend_px: int = 32
 ) -> Optional[str]:
     """
     섹션별 PNG를 세로로 이어붙여 최종 상세페이지를 생성합니다.
@@ -93,15 +129,22 @@ def stitch_sections(
     # 새 캔버스 생성
     result = Image.new('RGBA', (final_width, total_height), background_color)
 
-    # 이미지 이어붙이기 (모든 이미지가 동일한 너비이므로 정렬 불필요)
+    # 이미지 이어붙이기 + seam 좌표 수집
     y_offset = 0
+    seam_ys = []
     for i, img in enumerate(images):
-        # 모든 이미지가 target_width로 리사이즈되었으므로 x_offset은 항상 0
         x_offset = 0
-
         result.paste(img, (x_offset, y_offset), img if img.mode == 'RGBA' else None)
         print(f"  Section {i+1}: y={y_offset}, height={img.height}")
         y_offset += img.height
+        # 마지막 섹션 이후엔 seam 없음
+        if i < len(images) - 1:
+            seam_ys.append(y_offset)
+
+    # seam 블렌딩 적용 (ON by default)
+    if seam_blend and seam_ys:
+        print(f"  Applying seam blend at {len(seam_ys)} boundaries (blend_px={blend_px})...")
+        result = _blend_seams(result, seam_ys, blend_px=blend_px)
 
     # 출력 디렉토리 생성
     Path(output_path).parent.mkdir(parents=True, exist_ok=True)
@@ -170,7 +213,7 @@ def stitch_from_directory(
         return None
 
     print(f"Found {len(existing_paths)} section images")
-    return stitch_sections(existing_paths, output_path)
+    return stitch_sections(existing_paths, output_path, seam_blend=True, blend_px=32)
 
 
 def create_preview(

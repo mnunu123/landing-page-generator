@@ -1,0 +1,85 @@
+{
+  "_note": "top_pct는 페이지 전체 높이 기준 %. mask는 버튼 뒤 배경 마스크(Gemini 잔상 제거용).",
+  "variant_slots": {
+    "A": {
+      "btn_color":        "#00D4FF",
+      "btn_hover":        "#1ae8ff",
+      "btn_shadow":       "rgba(0, 212, 255, 0.45)",
+      "btn_shadow_hover": "rgba(0, 212, 255, 0.70)",
+      "slots": [
+        {
+          "id":         "hero_cta",
+          "section_id": "01_hero",
+          "label":      "지금 사전예약하기",
+          "left_pct":   35.0,
+          "top_pct":    8.3,
+          "width_pct":  30.0,
+          "mask": {
+            "left_pct":   10.0,
+            "top_pct":    6.8,
+            "width_pct":  80.0,
+            "height_pct": 3.5,
+            "color":      "#0A0F1E"
+          },
+          "ga4": { "cta_id": "hero_cta", "section_id": "01_hero" }
+        },
+        {
+          "id":         "final_cta",
+          "section_id": "13_final_cta",
+          "label":      "지금 사전예약하기",
+          "left_pct":   35.0,
+          "top_pct":    96.4,
+          "width_pct":  30.0,
+          "mask": {
+            "left_pct":   10.0,
+            "top_pct":    95.0,
+            "width_pct":  80.0,
+            "height_pct": 4.2,
+            "color":      "#0A0F1E"
+          },
+          "ga4": { "cta_id": "final_cta", "section_id": "13_final_cta" }
+        }
+      ]
+    },
+    "B": {
+      "btn_color":        "#00FF7F",
+      "btn_hover":        "#1aff8f",
+      "btn_shadow":       "rgba(0, 255, 127, 0.45)",
+      "btn_shadow_hover": "rgba(0, 255, 127, 0.70)",
+      "slots": [
+        {
+          "id":         "hero_cta",
+          "section_id": "01_hero",
+          "label":      "지금 사전예약하기",
+          "left_pct":   35.0,
+          "top_pct":    8.3,
+          "width_pct":  30.0,
+          "mask": {
+            "left_pct":   10.0,
+            "top_pct":    6.8,
+            "width_pct":  80.0,
+            "height_pct": 3.5,
+            "color":      "#0A0F1E"
+          },
+          "ga4": { "cta_id": "hero_cta", "section_id": "01_hero" }
+        },
+        {
+          "id":         "final_cta",
+          "section_id": "13_final_cta",
+          "label":      "지금 사전예약하기",
+          "left_pct":   35.0,
+          "top_pct":    96.4,
+          "width_pct":  30.0,
+          "mask": {
+            "left_pct":   10.0,
+            "top_pct":    95.0,
+            "width_pct":  80.0,
+            "height_pct": 4.2,
+            "color":      "#0A0F1E"
+          },
+          "ga4": { "cta_id": "final_cta", "section_id": "13_final_cta" }
+        }
+      ]
+    }
+  }
+}
