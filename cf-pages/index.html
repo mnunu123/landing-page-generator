@@ -6,13 +6,13 @@
   <title>OpenClaw 퀀트 API — 사전예약</title>
   <meta name="description" content="BTC/USDT 전처리 완료 퀀트 데이터 API. 월 40,000원으로 시작하세요." />
 
-  <!-- ① GA4 — G-XXXXXXXXXX 를 실제 측정 ID로 교체 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <!-- ① GA4 — G-4LTXER7P0N 를 실제 측정 ID로 교체 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4LTXER7P0N"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
-    gtag('config', 'G-XXXXXXXXXX', { send_page_view: false });
+    gtag('config', 'G-4LTXER7P0N', { send_page_view: false });
   </script>
 
   <style>
@@ -59,11 +59,15 @@
     }
 
     /* ── CTA 배경 마스크 (Gemini 잔상 제거) ───── */
-    /* 버튼 뒤 넓은 영역을 어두운 배경색으로 덮어 반투명 사각형을 숨김 */
+    /* 버튼 뒤를 frosted glass 처리 → 잔상 제거 + 자연스러운 배경 */
     .cta-mask {
       position: absolute;
       z-index: 1;
       pointer-events: none;
+      background: rgba(10, 15, 30, 0.82);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 16px;
     }
 
     /* ── CTA 버튼 ────────────────────────────── */
@@ -278,7 +282,7 @@
    설정 — 배포 전 실제 값으로 교체하세요
 ──────────────────────────────────────────── */
 var CONFIG = {
-  GA4_ID:      'G-XXXXXXXXXX',   // 실제 GA4 측정 ID
+  GA4_ID:      'G-4LTXER7P0N',   // 실제 GA4 측정 ID
   EXP_ID:      'openclaw_v3v4',  // 실험 식별자
   PAGE_ID:     'openclaw',       // 페이지 식별자
   COOKIE_DAYS: 30,
@@ -301,7 +305,16 @@ function setCookie(name, val, days) {
    우선순위: URL ?var= > localStorage > cookie > 랜덤 신규
 ──────────────────────────────────────────── */
 function resolveVariant() {
-  var p = new URLSearchParams(location.search).get('var');
+  var params = new URLSearchParams(location.search);
+
+  // ?reset=1 → localStorage/cookie 초기화 후 랜덤 재배정
+  if (params.get('reset') === '1') {
+    localStorage.removeItem(CONFIG.STORAGE_KEY);
+    setCookie(CONFIG.STORAGE_KEY, '', -1);
+  }
+
+  // URL ?var= 명시적 지정이 최우선
+  var p = params.get('var');
   if (p === 'A' || p === 'B') { persistVariant(p); return p; }
 
   var s = localStorage.getItem(CONFIG.STORAGE_KEY) || getCookie(CONFIG.STORAGE_KEY);

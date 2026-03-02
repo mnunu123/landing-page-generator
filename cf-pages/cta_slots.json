@@ -1,5 +1,5 @@
 {
-  "_note": "top_pct는 페이지 전체 높이 기준 %. mask는 버튼 뒤 배경 마스크(Gemini 잔상 제거용).",
+  "_note": "top_pct는 페이지 전체 높이 기준 %. mask는 버튼 뒤 frosted glass 마스크(Gemini 잔상 제거용).",
   "variant_slots": {
     "A": {
       "btn_color":        "#00D4FF",
@@ -15,11 +15,10 @@
           "top_pct":    8.3,
           "width_pct":  30.0,
           "mask": {
-            "left_pct":   10.0,
-            "top_pct":    6.8,
-            "width_pct":  80.0,
-            "height_pct": 3.5,
-            "color":      "#0A0F1E"
+            "left_pct":   33.5,
+            "top_pct":    7.8,
+            "width_pct":  33.0,
+            "height_pct": 1.8
           },
           "ga4": { "cta_id": "hero_cta", "section_id": "01_hero" }
         },
@@ -31,11 +30,10 @@
           "top_pct":    96.4,
           "width_pct":  30.0,
           "mask": {
-            "left_pct":   10.0,
-            "top_pct":    95.0,
-            "width_pct":  80.0,
-            "height_pct": 4.2,
-            "color":      "#0A0F1E"
+            "left_pct":   33.5,
+            "top_pct":    95.9,
+            "width_pct":  33.0,
+            "height_pct": 1.8
           },
           "ga4": { "cta_id": "final_cta", "section_id": "13_final_cta" }
         }
@@ -55,11 +53,10 @@
           "top_pct":    8.3,
           "width_pct":  30.0,
           "mask": {
-            "left_pct":   10.0,
-            "top_pct":    6.8,
-            "width_pct":  80.0,
-            "height_pct": 3.5,
-            "color":      "#0A0F1E"
+            "left_pct":   33.5,
+            "top_pct":    7.8,
+            "width_pct":  33.0,
+            "height_pct": 1.8
           },
           "ga4": { "cta_id": "hero_cta", "section_id": "01_hero" }
         },
@@ -71,11 +68,10 @@
           "top_pct":    96.4,
           "width_pct":  30.0,
           "mask": {
-            "left_pct":   10.0,
-            "top_pct":    95.0,
-            "width_pct":  80.0,
-            "height_pct": 4.2,
-            "color":      "#0A0F1E"
+            "left_pct":   33.5,
+            "top_pct":    95.9,
+            "width_pct":  33.0,
+            "height_pct": 1.8
           },
           "ga4": { "cta_id": "final_cta", "section_id": "13_final_cta" }
         }
