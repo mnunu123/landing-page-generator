@@ -251,11 +251,10 @@
     <p id="modal-sub">월 40,000원 · 언제든 취소 가능</p>
 
     <!--
-      Formspree action URL: https://formspree.io/f/REPLACE_ME
-      실제 Form ID로 교체 후 배포하세요.
+      Formspree action URL: https://formspree.io/f/xlgwvqjp
     -->
     <form id="reserve-form"
-          action="https://formspree.io/f/REPLACE_ME"
+          action="https://formspree.io/f/xlgwvqjp"
           method="POST">
       <input type="text"  name="name"   placeholder="이름" required autocomplete="name" />
       <input type="email" name="email"  placeholder="이메일" required autocomplete="email" />
@@ -343,10 +342,17 @@ function sendGA4(eventName, extra) {
 }
 
 /* ── 모달 열기/닫기 ────────────────────────── */
+var lastCtaId     = '';
+var lastSectionId = '';
+
 function openModal(ga4Data, ctaId) {
+  // 마지막 클릭 CTA 추적 (lp_reserve_submit 에서 재사용)
+  lastCtaId     = ga4Data ? (ga4Data.cta_id     || ctaId) : ctaId;
+  lastSectionId = ga4Data ? (ga4Data.section_id || '')    : '';
+
   // 히든 필드 채우기
   document.getElementById('form-ab-var').value   = VARIANT;
-  document.getElementById('form-cta-from').value = ctaId || '';
+  document.getElementById('form-cta-from').value = lastCtaId;
 
   // 폼 초기화 (이미 성공한 경우 리셋)
   var form    = document.getElementById('reserve-form');
@@ -363,8 +369,8 @@ function openModal(ga4Data, ctaId) {
 
   // GA4: CTA 클릭
   sendGA4('lp_cta_click', {
-    cta_id:     ga4Data ? ga4Data.cta_id     : ctaId,
-    section_id: ga4Data ? ga4Data.section_id : '',
+    cta_id:     lastCtaId,
+    section_id: lastSectionId,
   });
 }
 
@@ -456,10 +462,12 @@ document.getElementById('reserve-form').addEventListener('submit', function(e) {
       form.style.display = 'none';
       document.getElementById('form-success').style.display = 'block';
 
-      // GA4: 신청 완료
+      // GA4: 신청 완료 (Formspree 성공 응답 후)
       sendGA4('lp_reserve_submit', {
-        plan:  'monthly',
-        price: 40000,
+        cta_id:     lastCtaId,
+        section_id: lastSectionId,
+        plan:       'monthly',
+        price:      40000,
       });
     } else {
       return res.json().then(function(data) {

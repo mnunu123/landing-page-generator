@@ -35,8 +35,8 @@ TARGET_EVENTS = ["lp_impression", "lp_cta_click", "lp_reserve_submit"]
 
 RICH_DIMENSIONS = [
     "date", "eventName",
-    "customEvent:ab_variant",
-    "customEvent:experiment_id",
+    "customEvent:var",
+    "customEvent:exp_id",
     "customEvent:cta_id",
     "customEvent:section_id",
 ]
