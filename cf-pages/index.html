@@ -258,9 +258,12 @@
           method="POST">
       <input type="text"  name="name"   placeholder="이름" required autocomplete="name" />
       <input type="email" name="email"  placeholder="이메일" required autocomplete="email" />
-      <input type="hidden" name="_subject" value="OpenClaw 사전예약 신청" />
-      <input type="hidden" id="form-ab-var"   name="ab_variant"  value="" />
-      <input type="hidden" id="form-cta-from" name="cta_from"    value="" />
+      <input type="hidden" name="_subject"  value="OpenClaw 사전예약 신청" />
+      <input type="hidden" id="form-var"        name="var"        value="" />
+      <input type="hidden" id="form-exp-id"     name="exp_id"     value="" />
+      <input type="hidden" id="form-page-id"    name="page_id"    value="" />
+      <input type="hidden" id="form-cta-id"     name="cta_id"     value="" />
+      <input type="hidden" id="form-section-id" name="section_id" value="" />
       <button type="submit" id="form-submit">신청하기 →</button>
     </form>
 
@@ -287,6 +290,9 @@ var CONFIG = {
   COOKIE_DAYS: 30,
   STORAGE_KEY: 'oc_ab_var',
 };
+
+// ?debug=true 일 때만 콘솔 로그 출력 (PII 미포함 항목만 기록)
+var isDebug = new URLSearchParams(location.search).get('debug') === 'true';
 
 /* ── 유틸: 쿠키 ────────────────────────────── */
 function getCookie(name) {
@@ -337,31 +343,43 @@ function sendGA4(eventName, extra) {
     { exp_id: CONFIG.EXP_ID, var: VARIANT, page_id: CONFIG.PAGE_ID },
     extra || {}
   );
-  console.log('[GA4] sent', eventName, params);
+  if (isDebug) console.log('[GA4]', eventName, JSON.stringify(params));
   if (typeof gtag === 'function') gtag('event', eventName, params);
 }
 
 /* ── 모달 열기/닫기 ────────────────────────── */
-var lastCtaId     = '';
-var lastSectionId = '';
+var lastCtaId     = 'unknown';
+var lastSectionId = 'unknown';
+var hasSubmitted  = false;    // 페이지 세션 내 중복 제출 방지
 
-function openModal(ga4Data, ctaId) {
+// 히든 필드 일괄 채우기 (form.reset() 후에도 호출)
+function fillHiddenFields() {
+  document.getElementById('form-var').value        = VARIANT;
+  document.getElementById('form-exp-id').value     = CONFIG.EXP_ID;
+  document.getElementById('form-page-id').value    = CONFIG.PAGE_ID;
+  document.getElementById('form-cta-id').value     = lastCtaId;
+  document.getElementById('form-section-id').value = lastSectionId;
+}
+
+function openModal(ctaId, sectionId) {
   // 마지막 클릭 CTA 추적 (lp_reserve_submit 에서 재사용)
-  lastCtaId     = ga4Data ? (ga4Data.cta_id     || ctaId) : ctaId;
-  lastSectionId = ga4Data ? (ga4Data.section_id || '')    : '';
+  lastCtaId     = ctaId     || 'unknown';
+  lastSectionId = sectionId || 'unknown';
 
   // 히든 필드 채우기
-  document.getElementById('form-ab-var').value   = VARIANT;
-  document.getElementById('form-cta-from').value = lastCtaId;
+  fillHiddenFields();
 
-  // 폼 초기화 (이미 성공한 경우 리셋)
-  var form    = document.getElementById('reserve-form');
-  var success = document.getElementById('form-success');
-  if (success.style.display !== 'none') {
-    form.reset();
-    form.style.display    = '';
-    success.style.display = 'none';
-    document.getElementById('form-submit').disabled = false;
+  // 폼 초기화 — 성공 전이고 성공 화면이 남아 있으면 리셋
+  if (!hasSubmitted) {
+    var form    = document.getElementById('reserve-form');
+    var success = document.getElementById('form-success');
+    if (success.style.display !== 'none') {
+      form.reset();
+      fillHiddenFields();          // reset이 hidden 값도 지우므로 재주입
+      form.style.display    = '';
+      success.style.display = 'none';
+      document.getElementById('form-submit').disabled = false;
+    }
   }
 
   document.getElementById('modal-overlay').classList.add('open');
@@ -437,7 +455,8 @@ function renderCTAButtons(slots) {
     btn.style.width = slot.width_pct + '%';
 
     btn.addEventListener('click', function() {
-      openModal(slot.ga4 || null, slot.id);
+      var g = slot.ga4 || {};
+      openModal(g.cta_id || slot.id, g.section_id || '');
     });
 
     container.appendChild(btn);
@@ -447,40 +466,54 @@ function renderCTAButtons(slots) {
 /* ── Formspree 비동기 제출 ──────────────────── */
 document.getElementById('reserve-form').addEventListener('submit', function(e) {
   e.preventDefault();
+
+  // 중복 제출 방지 (hasSubmitted = true 이면 즉시 종료)
+  if (hasSubmitted) return;
+
   var form   = this;
   var submit = document.getElementById('form-submit');
-  submit.disabled   = true;
+  submit.disabled    = true;
   submit.textContent = '전송 중...';
 
   fetch(form.action, {
-    method:  'POST',
-    body:    new FormData(form),
-    headers: { 'Accept': 'application/json' },
+    method:    'POST',
+    body:      new FormData(form),
+    headers:   { 'Accept': 'application/json' },
+    keepalive: true,
   })
   .then(function(res) {
+    if (isDebug) console.log('[DEBUG] Formspree 응답:', res.status, res.ok ? 'OK' : 'FAIL');
+
     if (res.ok) {
+      // ── 성공 처리 ──────────────────────────────
+      hasSubmitted = true;   // 이후 중복 submit 차단
       form.style.display = 'none';
       document.getElementById('form-success').style.display = 'block';
 
-      // GA4: 신청 완료 (Formspree 성공 응답 후)
-      sendGA4('lp_reserve_submit', {
-        cta_id:     lastCtaId,
-        section_id: lastSectionId,
+      // GA4: 신청 완료 — Formspree 200 OK 이후 1회만 발사
+      var payload = {
+        cta_id:     lastCtaId     || 'unknown',
+        section_id: lastSectionId || 'unknown',
         plan:       'monthly',
         price:      40000,
-      });
+      };
+      if (isDebug) console.log('[DEBUG] GA4 lp_reserve_submit payload:', JSON.stringify(payload));
+      sendGA4('lp_reserve_submit', payload);
+
     } else {
+      // ── 실패 처리 ──────────────────────────────
       return res.json().then(function(data) {
-        submit.disabled   = false;
+        submit.disabled    = false;
         submit.textContent = '신청하기 →';
-        var msg = (data.errors || []).map(function(e) { return e.message; }).join(', ')
+        var msg = (data.errors || []).map(function(err) { return err.message; }).join(', ')
                   || '오류가 발생했습니다. 다시 시도해주세요.';
         alert(msg);
       });
     }
   })
-  .catch(function() {
-    submit.disabled   = false;
+  .catch(function(err) {
+    if (isDebug) console.log('[DEBUG] Formspree 네트워크 오류:', err);
+    submit.disabled    = false;
     submit.textContent = '신청하기 →';
     alert('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
   });
