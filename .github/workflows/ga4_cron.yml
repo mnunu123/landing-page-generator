@@ -1,0 +1,58 @@
+# GA4 지표 자동 수집 — 매일 UTC 02:00 실행 (KST 11:00)
+name: GA4 Metrics Pull
+
+on:
+  schedule:
+    - cron: '0 2 * * *'   # 매일 UTC 02:00 (KST 11:00)
+  workflow_dispatch:        # 수동 실행 버튼
+
+permissions:
+  contents: write           # git commit/push 허용
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. 코드 체크아웃 ─────────────────────────────────────────────────────
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ── 2. Python 설정 ───────────────────────────────────────────────────────
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # ── 3. 의존성 설치 ───────────────────────────────────────────────────────
+      - name: Install dependencies
+        run: pip install google-analytics-data>=0.18.0 google-auth>=2.0.0
+
+      # ── 4. GA4 지표 수집 ─────────────────────────────────────────────────────
+      - name: Pull GA4 metrics
+        run: python tools/ga4_pull.py
+        env:
+          GA4_PROPERTY_ID: ${{ secrets.GA4_PROPERTY_ID }}
+          GA4_SA_JSON_B64: ${{ secrets.GA4_SA_JSON_B64 }}
+          GA4_HOSTNAME:    ${{ secrets.GA4_HOSTNAME }}
+
+      # ── 5. 결과 파일 아티팩트 업로드 (90일 보존) ────────────────────────────
+      - name: Upload metrics artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ga4-metrics-${{ github.run_id }}
+          path: metrics/
+          retention-days: 90
+
+      # ── 6. metrics/ 변경사항을 repo에 커밋 ──────────────────────────────────
+      - name: Commit metrics
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add metrics/
+          if git diff --cached --quiet; then
+            echo "[INFO] 변경된 지표 없음 — 커밋 스킵"
+          else
+            git commit -m "chore: GA4 metrics $(date -u +'%Y-%m-%d')"
+            git push
+          fi

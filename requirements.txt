@@ -2,3 +2,7 @@
 Pillow>=10.0.0
 requests>=2.28.0
 python-dotenv>=1.0.0
+
+# GA4 지표 수집 (tools/ga4_pull.py)
+google-analytics-data>=0.18.0
+google-auth>=2.0.0
