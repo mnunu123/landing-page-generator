@@ -3,7 +3,7 @@ name: GA4 Metrics Pull
 
 on:
   schedule:
-    - cron: '0 2 * * *'   # 매일 UTC 02:00 (KST 11:00)
+    - cron: '15 4 * * *'  # ⚠️ cron 테스트용 — 확인 후 '0 2 * * *' 로 복원
   workflow_dispatch:        # 수동 실행 버튼
 
 permissions:
