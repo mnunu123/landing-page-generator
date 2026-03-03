@@ -1,0 +1,42 @@
+{
+  "dimension_headers": [
+    "date",
+    "eventName"
+  ],
+  "metric_headers": [
+    "eventCount"
+  ],
+  "rows": [
+    {
+      "dimensions": [
+        "20260302",
+        "lp_cta_click"
+      ],
+      "metrics": [
+        "2"
+      ]
+    },
+    {
+      "dimensions": [
+        "20260302",
+        "lp_impression"
+      ],
+      "metrics": [
+        "2"
+      ]
+    }
+  ],
+  "row_count": 2,
+  "meta": {
+    "mode": "basic",
+    "property_id": "526541228",
+    "hostname_filter": "detail-page-8hw.pages.dev",
+    "pulled_at": "2026-03-03T04:05:05.773737+00:00",
+    "date_range": "7daysAgo ~ today",
+    "target_events": [
+      "lp_impression",
+      "lp_cta_click",
+      "lp_reserve_submit"
+    ]
+  }
+}
