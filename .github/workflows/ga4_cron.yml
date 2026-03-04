@@ -36,7 +36,11 @@ jobs:
           GA4_SA_JSON_B64: ${{ secrets.GA4_SA_JSON_B64 }}
           GA4_HOSTNAME:    ${{ secrets.GA4_HOSTNAME }}
 
-      # ── 5. 결과 파일 아티팩트 업로드 (90일 보존) ────────────────────────────
+      # ── 5. KPI 요약 파일 생성 (metrics_summary.json + .md) ──────────────────
+      - name: Summarize metrics
+        run: python tools/ga4_summarize.py
+
+      # ── 6. 결과 파일 아티팩트 업로드 (90일 보존) ────────────────────────────
       - name: Upload metrics artifact
         uses: actions/upload-artifact@v4
         with:
