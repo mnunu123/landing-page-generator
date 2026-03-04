@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>COS 구름백 — 한정 수량 ₩180,000</title>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G2LF362W40"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-G2LF362W40', { send_page_view: false });
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #F5F3EF; display: flex; justify-content: center; min-height: 100vh;
+           font-family: -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; }
+    :root {
+      --btn-color:        #C8A882;
+      --btn-hover:        #B8956A;
+      --btn-shadow:       rgba(200, 168, 130, 0.45);
+      --btn-shadow-hover: rgba(200, 168, 130, 0.70);
+      --modal-border:     rgba(200, 168, 130, 0.30);
+      --modal-badge-bg:   rgba(200, 168, 130, 0.12);
+      --modal-badge-bdr:  rgba(200, 168, 130, 0.35);
+      --input-focus:      rgba(200, 168, 130, 0.55);
+    }
+    #lp-container { position: relative; width: 100%; max-width: 600px; }
+    #lp-img       { width: 100%; display: none; }
+    #loading      { width: 100%; min-height: 100vh; display: flex; align-items: center;
+                    justify-content: center; color: #9A9087; font-size: 14px; }
+    .cta-mask {
+      position: absolute; pointer-events: none; z-index: 1;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border-radius: 16px;
+    }
+    .cta-btn {
+      position: absolute; z-index: 2;
+      background: var(--btn-color); color: #fff; border: none; border-radius: 50px;
+      font-size: clamp(14px, 2.5vw, 18px); font-weight: 700; letter-spacing: 0.02em;
+      cursor: pointer; padding: 0.7em 0;
+      box-shadow: 0 4px 20px var(--btn-shadow);
+      transition: background 0.15s, transform 0.12s, box-shadow 0.15s;
+    }
+    .cta-btn:hover  { background: var(--btn-hover); box-shadow: 0 6px 28px var(--btn-shadow-hover); transform: scale(1.025); }
+    .cta-btn:active { transform: scale(0.98); }
+
+    /* ── 모달 ── */
+    #modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.40); backdrop-filter: blur(4px);
+      z-index: 1000; align-items: center; justify-content: center;
+    }
+    #modal-overlay.open { display: flex; }
+    #modal-box {
+      background: #FAFAF8; border-radius: 20px; padding: 36px 32px 28px;
+      width: min(420px, 92vw); border: 1px solid var(--modal-border); position: relative;
+      box-shadow: 0 0 60px var(--modal-badge-bg), 0 16px 48px rgba(0,0,0,0.12);
+      animation: modal-in 0.22s ease;
+    }
+    @keyframes modal-in {
+      from { opacity: 0; transform: scale(0.94) translateY(12px); }
+      to   { opacity: 1; transform: scale(1)    translateY(0); }
+    }
+    #modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none;
+                   font-size: 22px; color: #9A9087; cursor: pointer; }
+    #modal-close:hover { color: #2C2620; }
+    #modal-badge {
+      display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: 0.06em;
+      color: var(--btn-color); background: var(--modal-badge-bg);
+      border: 1px solid var(--modal-badge-bdr); border-radius: 20px;
+      padding: 4px 12px; margin-bottom: 14px;
+    }
+    #modal-title { font-size: 22px; font-weight: 700; color: #2C2620; margin-bottom: 6px; }
+    #modal-sub   { font-size: 14px; color: #7A6E65; margin-bottom: 22px; }
+    #reserve-form input[type="text"],
+    #reserve-form input[type="email"],
+    #reserve-form select {
+      width: 100%; padding: 13px 16px; background: #F0EDE8;
+      border: 1.5px solid #DDD6CC; border-radius: 10px; font-size: 15px; color: #2C2620;
+      margin-bottom: 12px; outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    #reserve-form input:focus, #reserve-form select:focus {
+      border-color: var(--btn-color); box-shadow: 0 0 0 3px var(--input-focus);
+    }
+    #reserve-form input::placeholder { color: #9A9087; }
+    #form-submit {
+      width: 100%; padding: 15px; background: var(--btn-color); color: #fff;
+      border: none; border-radius: 50px; font-size: 16px; font-weight: 700;
+      cursor: pointer; box-shadow: 0 4px 16px var(--btn-shadow);
+      transition: background 0.15s, transform 0.1s; margin-top: 4px;
+    }
+    #form-submit:hover    { background: var(--btn-hover); transform: scale(1.01); }
+    #form-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    #form-success { display: none; text-align: center; padding: 24px 0;
+                    font-size: 16px; color: #2C2620; line-height: 1.7; }
+    #form-success small { color: #9A9087; font-size: 13px; }
+    #modal-disclaimer { margin-top: 18px; font-size: 11px; color: #B0A9A3;
+                        text-align: center; line-height: 1.6; }
+  </style>
+</head>
+<body>
+
+<!-- ① 랜딩 페이지 이미지 -->
+<div id="lp-container">
+  <div id="loading">이미지 로딩 중...</div>
+  <img id="lp-img" alt="COS 구름백 상세페이지" style="display:none;" />
+</div>
+
+<!-- ② 구매 문의 모달 -->
+<div id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div id="modal-box">
+    <button id="modal-close" aria-label="닫기">&times;</button>
+    <p id="modal-badge">한정 수량</p>
+    <h2 id="modal-title">COS 구름백 구매 문의</h2>
+    <p id="modal-sub">₩180,000 · 크림 / 그레이 / 틸 선택 가능</p>
+
+    <form id="reserve-form" action="https://formspree.io/f/xlgwvqjp" method="POST">
+      <input type="text"  name="name"  placeholder="이름" required autocomplete="name" />
+      <input type="email" name="email" placeholder="이메일" required autocomplete="email" />
+      <select name="color">
+        <option value="" disabled selected>색상 선택 (선택 사항)</option>
+        <option value="cream">크림 (Cream)</option>
+        <option value="gray">그레이 (Gray)</option>
+        <option value="teal">틸 (Teal)</option>
+      </select>
+      <input type="hidden" name="_subject"    value="COS 구름백 구매 문의" />
+      <input type="hidden" id="form-cta-id"     name="cta_id"     value="" />
+      <input type="hidden" id="form-section-id" name="section_id" value="" />
+      <button type="submit" id="form-submit">구매 문의하기 →</button>
+    </form>
+
+    <div id="form-success">
+      문의가 접수되었습니다! 🎉<br>
+      <small>24시간 내 이메일로 안내해 드리겠습니다.</small>
+    </div>
+
+    <p id="modal-disclaimer">
+      * 재고 소진 시 안내 드립니다.<br>
+      * 구매 확정은 담당자 연락 후 진행됩니다.
+    </p>
+  </div>
+</div>
+
+<script>
+var CONFIG = { GA4_ID: 'G-G2LF362W40', EXP_ID: 'cos_bag_v1', PAGE_ID: 'cos_bag' };
+var isDebug = new URLSearchParams(location.search).get('debug') === 'true';
+
+function sendGA4(eventName, extra) {
+  var params = Object.assign({ exp_id: CONFIG.EXP_ID, page_id: CONFIG.PAGE_ID }, extra || {});
+  if (isDebug) console.log('[GA4]', eventName, JSON.stringify(params));
+  if (typeof gtag === 'function') gtag('event', eventName, params);
+}
+
+var lastCtaId = 'unknown', lastSectionId = 'unknown', hasSubmitted = false;
+
+function fillHiddenFields() {
+  document.getElementById('form-cta-id').value     = lastCtaId;
+  document.getElementById('form-section-id').value = lastSectionId;
+}
+
+function openModal(ctaId, sectionId) {
+  lastCtaId     = ctaId     || 'unknown';
+  lastSectionId = sectionId || 'unknown';
+  fillHiddenFields();
+  if (!hasSubmitted) {
+    var form = document.getElementById('reserve-form');
+    var succ = document.getElementById('form-success');
+    if (succ.style.display !== 'none') {
+      form.reset(); fillHiddenFields();
+      form.style.display = ''; succ.style.display = 'none';
+      document.getElementById('form-submit').disabled = false;
+    }
+  }
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  sendGA4('lp_cta_click', { cta_id: lastCtaId, section_id: lastSectionId });
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function renderCTAButtons(data) {
+  var slots     = data.slots || [];
+  var container = document.getElementById('lp-container');
+  var btnColor  = data.btn_color || '#C8A882';
+
+  // CSS 변수 주입
+  var root = document.documentElement;
+  root.style.setProperty('--btn-color',        data.btn_color        || btnColor);
+  root.style.setProperty('--btn-hover',        data.btn_hover        || '#B8956A');
+  root.style.setProperty('--btn-shadow',       data.btn_shadow       || 'rgba(200,168,130,0.45)');
+  root.style.setProperty('--btn-shadow-hover', data.btn_shadow_hover || 'rgba(200,168,130,0.70)');
+
+  slots.forEach(function(slot) {
+    if (slot.mask) {
+      var m = slot.mask, mask = document.createElement('div');
+      mask.className = 'cta-mask';
+      mask.style.left   = m.left_pct   + '%';
+      mask.style.top    = m.top_pct    + '%';
+      mask.style.width  = m.width_pct  + '%';
+      mask.style.height = m.height_pct + '%';
+      mask.style.background = m.color || 'rgba(250,250,248,0.88)';
+      container.appendChild(mask);
+    }
+    var btn = document.createElement('button');
+    btn.className   = 'cta-btn';
+    btn.textContent = slot.label || '지금 구매하기';
+    btn.setAttribute('type', 'button');
+    btn.style.left  = slot.left_pct  + '%';
+    btn.style.top   = slot.top_pct   + '%';
+    btn.style.width = slot.width_pct + '%';
+    btn.addEventListener('click', function() {
+      var g = slot.ga4 || {};
+      openModal(g.cta_id || slot.id, g.section_id || '');
+    });
+    container.appendChild(btn);
+  });
+}
+
+/* ── Formspree 제출 ── */
+document.getElementById('reserve-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  if (hasSubmitted) return;
+  var form = this, submit = document.getElementById('form-submit');
+  submit.disabled = true; submit.textContent = '전송 중...';
+  fetch(form.action, {
+    method: 'POST', body: new FormData(form),
+    headers: { 'Accept': 'application/json' }, keepalive: true,
+  })
+  .then(function(res) {
+    if (isDebug) console.log('[DEBUG] Formspree:', res.status, res.ok ? 'OK' : 'FAIL');
+    if (res.ok) {
+      hasSubmitted = true;
+      form.style.display = 'none';
+      document.getElementById('form-success').style.display = 'block';
+      sendGA4('lp_reserve_submit', {
+        cta_id:     lastCtaId     || 'unknown',
+        section_id: lastSectionId || 'unknown',
+        price:      180000,
+      });
+    } else {
+      return res.json().then(function(data) {
+        submit.disabled = false; submit.textContent = '구매 문의하기 →';
+        alert((data.errors || []).map(function(e) { return e.message; }).join(', ')
+              || '오류가 발생했습니다. 다시 시도해주세요.');
+      });
+    }
+  })
+  .catch(function(err) {
+    if (isDebug) console.log('[DEBUG] 네트워크 오류:', err);
+    submit.disabled = false; submit.textContent = '구매 문의하기 →';
+    alert('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
+  });
+});
+
+/* ── 이벤트 ── */
+document.getElementById('modal-overlay').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+document.getElementById('modal-close').addEventListener('click', closeModal);
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+
+/* ── 초기화 ── */
+var img = document.getElementById('lp-img'), loading = document.getElementById('loading');
+img.src = 'images/final_page.png';
+img.addEventListener('load',  function() { loading.style.display = 'none'; img.style.display = 'block'; });
+img.addEventListener('error', function() { loading.textContent = '이미지를 불러올 수 없습니다.'; });
+
+fetch('cta_slots.json')
+  .then(function(r) { if (!r.ok) throw new Error('cta_slots.json ' + r.status); return r.json(); })
+  .then(function(data) { renderCTAButtons(data); sendGA4('lp_impression', {}); })
+  .catch(function(err) { console.error('[cta_slots]', err); });
+</script>
+</body>
+</html>

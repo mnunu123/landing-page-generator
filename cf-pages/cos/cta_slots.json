@@ -1,0 +1,41 @@
+{
+  "_note": "COS 구름백 CTA 슬롯 설정. mask.color는 페이지 배경색(크림)과 맞춤.",
+  "btn_color":        "#C8A882",
+  "btn_hover":        "#B8956A",
+  "btn_shadow":       "rgba(200, 168, 130, 0.45)",
+  "btn_shadow_hover": "rgba(200, 168, 130, 0.70)",
+  "slots": [
+    {
+      "id":         "hero_cta",
+      "section_id": "01_hero",
+      "label":      "지금 구매하기",
+      "left_pct":   35.0,
+      "top_pct":    8.3,
+      "width_pct":  30.0,
+      "mask": {
+        "left_pct":   33.5,
+        "top_pct":    7.8,
+        "width_pct":  33.0,
+        "height_pct": 1.8,
+        "color":      "rgba(250, 250, 248, 0.88)"
+      },
+      "ga4": { "cta_id": "hero_cta", "section_id": "01_hero" }
+    },
+    {
+      "id":         "final_cta",
+      "section_id": "13_final_cta",
+      "label":      "지금 구매하기",
+      "left_pct":   35.0,
+      "top_pct":    96.4,
+      "width_pct":  30.0,
+      "mask": {
+        "left_pct":   33.5,
+        "top_pct":    95.9,
+        "width_pct":  33.0,
+        "height_pct": 1.8,
+        "color":      "rgba(250, 250, 248, 0.88)"
+      },
+      "ga4": { "cta_id": "final_cta", "section_id": "13_final_cta" }
+    }
+  ]
+}
