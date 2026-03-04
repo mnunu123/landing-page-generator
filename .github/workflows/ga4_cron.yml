@@ -40,7 +40,11 @@ jobs:
       - name: Summarize metrics
         run: python tools/ga4_summarize.py
 
-      # ── 6. 결과 파일 아티팩트 업로드 (90일 보존) ────────────────────────────
+      # ── 6. A/B 승자 판단 ─────────────────────────────────────────────────────
+      - name: Decide winner
+        run: python tools/ab_decide.py
+
+      # ── 7. 결과 파일 아티팩트 업로드 (90일 보존) ────────────────────────────
       - name: Upload metrics artifact
         uses: actions/upload-artifact@v4
         with:
