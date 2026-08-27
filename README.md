@@ -2,6 +2,11 @@
 
 AI 에이전트 팀이 제품/서비스 정보를 기반으로 **13개 섹션의 고전환 상세페이지**를 자동 생성합니다.
 
+> ⚠️ **실제 구동 화면 캡처 불가 안내**: 전체 파이프라인은 유효한 `GEMINI_API_KEY`와 실제 제품 정보 입력이 있어야
+> 섹션 이미지를 생성합니다. 이 환경에는 발급된 키가 없어 실행 결과 캡처는 생략했습니다. 이미 만들어진 실제 결과물은
+> [mnunu123/blog의 관련 포스트](https://github.com/mnunu123/blog/blob/master/content/posts/ai-agent/landing-page-generator-overview.mdx)에서
+> 실제 산출 이미지와 함께 확인할 수 있습니다.
+
 ## 특징
 
 - **5개 AI 에이전트** 협업 시스템
